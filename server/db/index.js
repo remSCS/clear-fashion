@@ -2,7 +2,7 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const fs = require('fs');
 
-const MONGODB_DB_NAME = 'clearfashion';
+const MONGODB_DB_NAME = 'Cluster0';
 const MONGODB_COLLECTION = 'products';
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -20,9 +20,9 @@ const getDB = module.exports.getDB = async () => {
       return database;
     }
 
+    console.log(MONGODB_URI);
     client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     database = client.db(MONGODB_DB_NAME);
-
     console.log('💽  Connected');
 
     return database;

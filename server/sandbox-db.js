@@ -59,7 +59,20 @@ async function sandbox () {
 
     console.log('💽  Find Loom products only');
 
+    // Requete 1: Find all products related to a given brands
     const loomOnly = await db.find({'brand': 'loom'});
+    console.log(`👕 ${loomOnly.length} total of products found for Loom`);
+    console.log(loomOnly);
+
+    // Requete 2: Find all products less than a price
+    const lessThan50 = await db.find({price:{"$lt":50}});
+    console.log(`💰 ${lessThan50.length} total of products found with a price < 50€`);
+    console.log(lessThan50);
+
+    // Requete 3: Find all products sorted by price
+    const sortProduct = await db.sort({},{"price":1});
+    console.log(`📚 ${sortProduct.length} total of products sorted`);
+    console.log(sortProduct);
 
     console.log(`👕 ${loomOnly.length} total of products found for Loom`);
     console.log(loomOnly);

@@ -1,7 +1,8 @@
 /* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./sources/dedicatedbrand');
+const montlimart = require('./sources/montlimart');
 
-async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
+async function dedicatedScrape (eshop = 'https://www.dedicatedbrand.com/en/') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
 
@@ -16,6 +17,24 @@ async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
   }
 }
 
+async function montlimartScrape (eshop = 'https://www.montlimart.com/accessoires.html') {
+    try {
+        console.log(`🕵️‍♀️  browsing ${eshop} source`);
+
+        const products = await montlimart.scrape(eshop);
+
+        products.forEach(element => console.log(element));
+
+        console.log(products);
+        console.log('done');
+        process.exit(0);
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
+    }
+}
+
 const [,, eshop] = process.argv;
 
-sandbox(eshop);
+dedicatedScrape(eshop);
+montlimartScrape(eshop);

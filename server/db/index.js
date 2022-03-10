@@ -73,6 +73,19 @@ module.exports.find = async query => {
   }
 };
 
+module.exports.sort = async (query1,query2) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find(query1).sort(query2).toArray();
+
+    return result;
+  } catch (error) {
+    console.error('🚨 collection.find...', error);
+    return null;
+  }
+};
+
 /**
  * Close the connection
  */

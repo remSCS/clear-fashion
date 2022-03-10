@@ -31,12 +31,8 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 1. Create a new variable and assign it the link of the cheapest t-shirt
 // I can find on these e-shops
 // 2. Log the variable
-let cheapest=MY_FAVORITE_BRANDS[1].url
-console.log(cheapest)
-
-
-
-
+let cheapest = MY_FAVORITE_BRANDS[1]["url"]
+console.log("Cheapest:", cheapest)
 
 /**
  * 👕
@@ -47,78 +43,54 @@ console.log(cheapest)
  * 👕
  */
 
-
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
-let numberOfProducts=marketplace.length
-console.log("number of products : ",numberOfProducts)
-
-
+let numberOfProducts = marketplace.length
+console.log("Number of products:", numberOfProducts)
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
 // 2. Log the variable
 // 3. Log how many brands we have
-let brandsName=[]
-marketplace.forEach(x => {
-  brandsName.push(x.brand)
+let brands = []
+marketplace.forEach(p => {
+  brands.push(p["brand"])
 });
-let DistinctBrands=new Set(brandsName)
-console.log(DistinctBrands);
-
+console.log(new Set(brands))
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
-function PriceAscendingOrder(a,b){
-  return a.price-b.price;
-}
-
-let marketPlaceSortedPrice=[...marketplace];
-marketPlaceSortedPrice.sort(PriceAscendingOrder);
-console.log(marketPlaceSortedPrice)
-
+let prices = [...marketplace].sort(function(a, b) {
+  return a.price - b.price;})
+console.log(prices)
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
-function DateDescendingOrder(a,b){
-  return new Date(b.date)-new Date(a.date);
-}
-
-let marketPlaceSortedDate=[...marketplace];
-marketPlaceSortedDate.sort(DateDescendingOrder);
-console.log(marketPlaceSortedDate)
+let dates = [...marketplace].sort(function(a, b) {
+  return new Date(b.date) - new Date(a.date)
+})
+console.log(dates)
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
-let marketplaceFiltered=[];
-marketplace.forEach(x => {
-  if(x.price>50 && x.price<100){
-    marketplaceFiltered.push(x)
-  }
-});
-
-console.log(marketplaceFiltered)
-
+console.log(prices.filter(x => x.price <= 100 && x.price >= 50))
 
 // 🎯 TODO: Average price
 // 1. Determine the average price of the marketplace
 // 2. Log the average
-let averageMarketPlace=0
-marketplace.forEach(x => {
-  averageMarketPlace+=x.price
-});
-averageMarketPlace/=marketplace.length
-console.log(averageMarketPlace)
-
-
-
-
+// console.log("Average price:", prices.reduce((a, b) => a.price + b.price) / prices.length)
+function averagePrice(arr){
+  let sum = 0
+  arr.forEach(p => sum += p.price)
+  return sum/arr.length;
+}
+console.log(`Average price: $${averagePrice(prices)}`)
 /**
  * 🏎
  * We are almost done with the `marketplace` variable
@@ -130,19 +102,6 @@ console.log(averageMarketPlace)
 // 1. Create an object called `brands` to manipulate products by brand name
 // The key is the brand name
 // The value is the array of products
-let brands={};
-marketplace.forEach(product => {
-  if(product.brand in brands){
-    brands[product.brand].push(product);
-  }  
-  else{
-    brands[product.brand]=[product];
-  }
-});
-console.log("distinct brands");
-console.log(DistinctBrands);
-console.log("brands");
-console.log(brands);
 //
 // Example:
 // const brands = {
@@ -154,34 +113,34 @@ console.log(brands);
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
-
+brands = {}
+marketplace.forEach(p => {
+  if (p.brand in brands) {
+    brands[p.brand].push(p)
+  }
+  else{
+    brands[p.brand] = [p]
+  }
+})
+console.log(brands)
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
-for(const key of Object.keys(brands)){
-  brands[key].sort(
-    function(a,b){ return b.price-a.price}
-  )
+for (const key of Object.keys(brands)) {
+  brands[key].sort(function(a, b) {
+    return b.price - a.price;})
 }
-console.log("sorted by price");
-console.log(brands);
-
-
+console.log(brands)
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
-for(const key of Object.keys(brands)){
-  brands[key].sort(
-    function(a,b){ return new Date(a.date)-new Date(b.date)}
-  )
+for (const key of Object.keys(brands)) {
+  brands[key].sort(function(a, b) {
+    return new Date(a.date) - new Date(b.date)})
 }
-console.log("sorted by date");
-console.log(brands);
-
-
-
+console.log(brands)
 
 /**
  * 💶
@@ -193,10 +152,20 @@ console.log(brands);
 // 🎯 TODO: Compute the p90 price value
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
-
-
-
-
+let lowests = {}
+for (const key of Object.keys(brands)) {
+  prices = []
+  brands[key].forEach(p => prices.push(p.price))
+  prices.sort(function(a, b){return a-b})
+  let index = prices.length*0.1
+  if(Number.isInteger(index)){
+    lowests[key] = prices[index]
+  }
+  else{
+    lowests[key] = (prices[Math.floor(index)] + prices[Math.ceil(index)]) / 2
+  }
+}
+console.log(lowests)
 
 /**
  * 🧥
@@ -269,7 +238,11 @@ const COTELE_PARIS = [
 // 🎯 TODO: New released products
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
-
+COTELE_PARIS.forEach(product =>{
+  if(Date.now() - new Date(product.released) < (1000 * 60 * 60 * 24 * 30)){
+    console.log(p)
+  }
+})
 
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)

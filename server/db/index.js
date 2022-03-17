@@ -57,7 +57,7 @@ module.exports.insert = async products => {
 
 /**
  * Find products based on query
- * @param  {Array}  query
+ * @param  {{_id}}  query
  * @return {Array}
  */
 module.exports.find = async query => {

@@ -25,7 +25,15 @@ app.get('/products/search', async (request, response) => {
 });
 
 app.get('/products/:id', async (request, response) => {
-  response.send(await service.findByProductId(request));
+    try {
+        let resp = await service.findByProductId(request)
+        response.send(resp);
+    }
+    catch (e){
+        if(e.message == 'Non existing product.'){
+            response.sendStatus(404);
+        }
+    }
 });
 
 app.listen(PORT);

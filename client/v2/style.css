@@ -1,0 +1,36 @@
+body{
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+            linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    margin: 0 auto;
+    max-width: 50em;
+    font-family: "Helvetica", "Arial", sans-serif;
+    line-height: 1.5;
+    padding: 4em 1em;
+    color: #F5EEE1;
+    /*text-align : center;*/
+}
+h1{
+    color: #FFDD4E;
+}
+
+h2 {
+    margin-top: 1em;
+    padding-top: 1em;
+}
+h2,
+h3,
+strong {
+    color: #B6ECFA
+}
+a{
+    color: #E30B77
+}
+.product{
+    text-align: center; /*center the text of product*/
+    margin-bottom: 2em;
+    border: 2px solid rgb(77, 86, 128); padding: 5px; /*encadre avec rectangle*/
+    border-radius : 10% / 60%; /*Arrondi le bord haut droit et bas gauche*/
+    border: rgb(77, 86, 128) 5px double;
+    background-clip: content-box;
+}

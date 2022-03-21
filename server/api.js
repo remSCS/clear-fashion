@@ -1,7 +1,6 @@
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
-const db = require('./db')
 const service = require("./service")
 
 const PORT = 8092;
@@ -21,7 +20,23 @@ app.get('/products', async (request, response) => {
 });
 
 app.get('/products/search', async (request, response) => {
-    response.send(await service.searchProcuts(request));
+    try{
+        let resp = await service.searchProducts(request);
+        response.send(resp);
+    }
+    catch(e){
+        switch (e.message){
+            case "Cannot parse price as float number":
+                response.sendStatus(404).send("Check your price.");
+                break;
+            case 'Cannot parse limit as int number':
+                response.sendStatus(404).send("Check your limit.");
+                break;
+            default:
+                response.sendStatus(404);
+                break;
+        }
+    }
 });
 
 app.get('/products/:id', async (request, response) => {

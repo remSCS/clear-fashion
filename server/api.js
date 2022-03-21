@@ -17,7 +17,7 @@ app.options('*', cors());
 
 app.get('/products', async (request, response) => {
     try{
-        let resp=await service.getAllProducts(request);
+        let resp = await service.getAllProducts(request);
         response.send(resp);
     }
     catch(e){

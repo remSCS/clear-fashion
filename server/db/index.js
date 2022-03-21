@@ -43,9 +43,7 @@ module.exports.insert = async products => {
     const collection = db.collection(MONGODB_COLLECTION);
     // More details
     // https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#insert-several-document-specifying-an-id-field
-    const result = await collection.insertMany(products, {'ordered': false});
-
-    return result;
+    return await collection.insertMany(products, {'ordered': false});
   } catch (error) {
     console.error('🚨 collection.insertMany...', error);
     fs.writeFileSync('products.json', JSON.stringify(products));
@@ -64,12 +62,11 @@ module.exports.find = async query => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find(query).toArray();
-
-    return result;
+    return await collection.find(query).toArray();
   } catch (error) {
     console.error('🚨 collection.find...', error);
     return null;
+
   }
 };
 
@@ -77,9 +74,8 @@ module.exports.sort = async (query1,query2) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find(query1).sort(query2).toArray();
+    return await collection.find(query1).sort(query2).toArray();
 
-    return result;
   } catch (error) {
     console.error('🚨 collection.find...', error);
     return null;

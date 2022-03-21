@@ -21,7 +21,7 @@ app.get('/products', async (request, response) => {
 });
 
 app.get('/products/search', async (request, response) => {
-    response.send(await service.searchProducts(request));
+    response.send(await service.searchProcuts(request));
 });
 
 app.get('/products/:id', async (request, response) => {
@@ -30,7 +30,7 @@ app.get('/products/:id', async (request, response) => {
         response.send(resp);
     }
     catch (e){
-        if(e.message == 'Non existing product.'){
+        if(e.message === 'Non existing product.'){
             response.sendStatus(404);
         }
     }

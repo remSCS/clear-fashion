@@ -9,30 +9,40 @@ module.exports.getAllProducts = async request => {
 // search for products (price, limit, brand)
 module.exports.searchProducts = async request => {
     let query = {};
-    let returnValue = {};
+    let product_list = {};
 
     if(request.query.brand != undefined) {
         query["brand"] = request.query.brand;
     }
 
     if(request.query.price != undefined){
-        query["price"] = {$lte: parseFloat(request.query.price)};
+        if(isNaN(parseFloat(request.query.price))){
+            throw new Error('Cannot parse price as float number');
+        }
+        else{
+            query["price"] = {$lte: parseFloat(request.query.price)};
+        }
     }
 
     let found = await db.sort(query, {"price": 1})
 
-    if(request.query.limit != undefined){
-        returnValue["limit"] = parseInt(request.query.limit);
-        returnValue["total"] = found.length;
-        returnValue["results"] = found.slice(0, request.query.limit);
+    if(request.query.limit != undefined) {
+        if(isNaN(parseInt(request.query.limit))) {
+            throw new Error('Cannot parse limit as int number');
+        }
+        else{
+            product_list["limit"] = parseInt(request.query.limit);
+            product_list["total"] = found.length;
+            product_list["results"] = found.slice(0, request.query.limit);
+        }
     }
     else{
-        returnValue["limit"] = 12;
-        returnValue["total"] = found.length;
-        returnValue["results"] = found.slice(0, 12);
+        product_list["limit"] = 12;
+        product_list["total"] = found.length;
+        product_list["results"] = found.slice(0, 12);
     }
 
-    return returnValue
+    return product_list
 }
 
 // product by id

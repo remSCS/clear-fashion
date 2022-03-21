@@ -16,7 +16,13 @@ app.use(helmet());
 app.options('*', cors());
 
 app.get('/products', async (request, response) => {
-  response.send(await service.getAllProducts(request));
+    try{
+        let resp=await service.getAllProducts(request);
+        response.send(resp);
+    }
+    catch(e){
+        response.sendStatus(404);
+    }
 });
 
 app.get('/products/search', async (request, response) => {

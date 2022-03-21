@@ -27,10 +27,10 @@ app.get('/products/search', async (request, response) => {
     catch(e){
         switch (e.message){
             case "Cannot parse price as float number":
-                response.sendStatus(404).send("Check your price.");
+                response.status(404).send("Check your price.");
                 break;
             case 'Cannot parse limit as int number':
-                response.sendStatus(404).send("Check your limit.");
+                response.status(404).send("Check your limit.");
                 break;
             default:
                 response.sendStatus(404);
@@ -46,7 +46,7 @@ app.get('/products/:id', async (request, response) => {
     }
     catch (e){
         if(e.message === 'Non existing product.'){
-            response.sendStatus(404);
+            response.status(404).send("This product doesn't exist");
         }
     }
 });

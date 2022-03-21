@@ -21,7 +21,7 @@ app.get('/products', async (request, response) => {
 });
 
 app.get('/products/search', async (request, response) => {
-    response.send(await service.searchProcuts(request));
+    response.send(await service.searchProducts(request));
 });
 
 app.get('/products/:id', async (request, response) => {

@@ -31,7 +31,7 @@ app.get('/products', async (request, response) => {
         response.send(resp);
     }
     catch(e){
-        response.sendStatus(404);
+        response.sendStatus(401);
     }
 });
 

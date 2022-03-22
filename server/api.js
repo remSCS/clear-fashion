@@ -15,13 +15,23 @@ app.use(helmet());
 
 app.options('*', cors());
 
-app.get('/test', async (request, response) => {
+app.get('/loadAllProductsWithPage', async (request, response) => {
     try{
-        let resp = await service.testing(request);
+        let resp = await service.loadAllProductsWithPage(request);
         response.send(resp);
     }
     catch(e){
-        response.sendStatus(404);
+        switch (e.message){
+            case "Cannot parse limit.":
+                response.status(404).send("Check your limit.");
+                break;
+            case 'Cannot parse page.':
+                response.status(404).send("Check your page number.");
+                break;
+            default:
+                response.sendStatus(404);
+                break;
+        }
     }
 });
 

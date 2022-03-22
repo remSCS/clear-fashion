@@ -54,6 +54,25 @@ module.exports.findByProductId = async request => {
     else{ return products; }
 }
 
-module.exports.testing = async request => {
-    return db.testing(request);
+module.exports.loadAllProductsWithPage = async request => {
+    let product_list = {};
+    let limit = request.query.limit;
+    let page = request.query.size;
+
+    if (limit === undefined) limit = 12;
+    else {
+        if (limit <= 0 || isNaN(parseInt(limit))){
+            throw new Error("Cannot parse limit.");
+        }
+    }
+
+    if (page === undefined) page = 1;
+    else{
+        if (page <= 0 || isNaN(parseInt(page))){
+            throw new Error("Cannot parse page.");
+        }
+    }
+
+    product_list = await db.loadPage(parseInt(limit), parseInt(page));
+    return product_list
 }

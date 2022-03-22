@@ -62,7 +62,7 @@ module.exports.find = async query => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    return await collection.find(query).toArray();
+    return await collection.find(query).skip().limit().toArray();
   } catch (error) {
     console.error('🚨 collection.find...', error);
     return null;
@@ -81,6 +81,19 @@ module.exports.sort = async (query1,query2) => {
     return null;
   }
 };
+
+module.exports.testing = async query => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const q = collection.find(query).skip(5).limit(10);
+    return await q.execute().toArray();
+  } catch (error) {
+    console.error('🚨 collection.find...', error);
+    return null;
+
+  }
+}
 
 /**
  * Close the connection

@@ -15,6 +15,16 @@ app.use(helmet());
 
 app.options('*', cors());
 
+app.get('/test', async (request, response) => {
+    try{
+        let resp = await service.testing(request);
+        response.send(resp);
+    }
+    catch(e){
+        response.sendStatus(404);
+    }
+});
+
 app.get('/products', async (request, response) => {
     try{
         let resp = await service.getAllProducts(request);

@@ -47,9 +47,13 @@ module.exports.searchProducts = async request => {
 // product by id
 module.exports.findByProductId = async request => {
     const id = request.params.id;
-    let products = await db.find({_id: id});
+    let products = db.find({_id: id});
     if(products.length === 0){
         throw new Error('Non existing product.');
     }
     else{ return products; }
+}
+
+module.exports.testing = async request => {
+    return db.testing(request);
 }

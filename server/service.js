@@ -57,7 +57,7 @@ module.exports.findByProductId = async request => {
 module.exports.loadAllProductsWithPage = async request => {
     let product_list = {};
     let limit = request.query.limit;
-    let page = request.query.size;
+    let page = request.query.page;
 
     if (limit === undefined) limit = 12;
     else {

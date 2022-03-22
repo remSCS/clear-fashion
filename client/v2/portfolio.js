@@ -50,17 +50,16 @@ const setCurrentProducts = ({result, meta}) => {
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-server-side.vercel.app/loadAllProductsWithPage?page=${page}&size=${size}`
+      `http://localhost:8092/loadAllProductsWithPage?page=${page}&size=${size}`
     );
     const body = await response.json();
 
-    console.log(body);
-    if (body.success !== true) {
-      console.error(body);
+    if (response.status !== 200) {
+      console.error(response);
       return {currentProducts, currentPagination};
     }
 
-    return body.data;
+    return {result: body, meta: page};
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
@@ -130,11 +129,11 @@ const renderIndicators = pagination => {
   spanNbProducts.innerHTML = count;
 
   // Feature 8 - Number of products indicator
-  spanNbProductsDisplayed.innerHTML = currentProducts.length; 
-  
+  spanNbProductsDisplayed.innerHTML = currentProducts.length;
+
   //Feature 9 - Number of recent products indicator
-  spanNbNewProducts.innerHTML = currentProducts.filter(product => new_product(product)).length; 
-  
+  spanNbNewProducts.innerHTML = currentProducts.filter(product => new_product(product)).length;
+
   // Feature 10 - p50, p90 and p95 price value indicator
   if(currentProducts.length != 0){
   spanp50.innerHTML = calcQuartile(currentProducts,50).toFixed(2) + " €";
@@ -156,7 +155,7 @@ const renderIndicators = pagination => {
  * @param  {Object} products
  */
  const renderBrands = products => {
-  const brands = []; // distinct list of brands 
+  const brands = []; // distinct list of brands
   const options = products.map(product => {
     // if the brand doesn't exist in the list of brands
     if(!brands.includes(product.brand)){
@@ -192,7 +191,7 @@ selectShow.addEventListener('change', async (event) => {
   // .then(() => {
   //   updateCurrentProductsWithFavorites() //Feature 14
   // })
-  .then(() => { 
+  .then(() => {
     //Feature 2
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -228,7 +227,7 @@ selectPage.addEventListener('change', async (event) => {
   // .then(() => {
   //   updateCurrentProductsWithFavorites() //Feature 14
   // })
-  .then(() => { 
+  .then(() => {
     //Feature 2
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -264,7 +263,7 @@ selectBrand.addEventListener('change', async (event) => {
   // .then(() => {
   //   updateCurrentProductsWithFavorites() //Feature 14
   // })
-  .then(() => { 
+  .then(() => {
     if(currentBrand !== ""){
       //.filter(): Returns the elements of an array that meet the condition specified in a callback function.
       // example: words.filter(word => word.length > 6);
@@ -301,7 +300,7 @@ selectRecentlyReleased.addEventListener('change', event => {
   // .then(() => {
   //   updateCurrentProductsWithFavorites() //Feature 14
   // })
-  .then(() => { 
+  .then(() => {
     //Feature 2
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -326,7 +325,7 @@ selectRecentlyReleased.addEventListener('change', event => {
     //   currentProducts = currentProducts.filter(product => isInFavorite(product));
     // }
     render(currentProducts, currentPagination);
-    }) 
+    })
 });
 
 // Feature 4 - Filter by reasonable price
@@ -337,7 +336,7 @@ selectReasonable.addEventListener('change', event => {
   // .then(() => {
   //   updateCurrentProductsWithFavorites() //Feature 14
   // })
-  .then(() => { 
+  .then(() => {
     //Feature 2
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -363,7 +362,7 @@ selectReasonable.addEventListener('change', event => {
     // }
     render(currentProducts, currentPagination);
   })
-  
+
 });
 
 // Feature 5 a 6 - Sort by price & date
@@ -374,7 +373,7 @@ selectSort.addEventListener('change', event =>{
   // .then(() => {
   //   updateCurrentProductsWithFavorites() //Feature 14
   // })
-  .then(() => { 
+  .then(() => {
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
     }
@@ -393,7 +392,7 @@ selectSort.addEventListener('change', event =>{
     // //Feature 14
     // if(FavoriteChecked){
     //   currentProducts = currentProducts.filter(product => isInFavorite(product));
-    // }    
+    // }
       render(currentProducts, currentPagination);
   })
 })
@@ -447,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () =>
 //From TD1
 function new_product(product){
   let new_product = false;
-  if ((new Date().getTime() - new Date(product.released).getTime() ) / (24*60*60*1000) < 14) { 
+  if ((new Date().getTime() - new Date(product.released).getTime() ) / (24*60*60*1000) < 14) {
     new_product = true;
   }
   return new_product;
@@ -468,7 +467,7 @@ function calcQuartile(products,q){
   // Sort the array into ascending order
   var data = price_products.sort((e1, e2) => { return e1 >  e2});
 
-  // Convert into decimal 
+  // Convert into decimal
   q = q/100;
 
   // Work out the position in the array of the percentile point
@@ -496,11 +495,11 @@ function lastReleasedProduct(products){
 function checkFavorite(product_id){
   const product = currentProducts.find(product => {
     return product.uuid === product_id;
-  });  
-  
+  });
+
   const index = currentProducts.indexOf(product);
-  currentProducts[index].favorite = !product.favorite; //boleen 
-  
+  currentProducts[index].favorite = !product.favorite; //boleen
+
   if(currentProducts[index].favorite){
     favoriteProducts.push(currentProducts[index]);
   }

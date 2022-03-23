@@ -86,7 +86,7 @@ module.exports.loadPage = async (limit, page) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    console.log(page, limit);
+    //console.log(page, limit);
     return await collection.find().skip((page-1)*limit).limit(limit).toArray();
 
   } catch (error) {

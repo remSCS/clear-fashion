@@ -124,7 +124,7 @@ const renderPagination = pagination => {
  * @param  {Object} pagination
  */
 const renderIndicators = pagination => {
-  const {count} = pagination;
+  const count = pagination;
 
   spanNbProducts.innerHTML = count;
 

@@ -1,78 +1,50 @@
-const db = require('./db')
+const db = require("./db");
 
 // get all products
-module.exports.getAllProducts = async request => {
-    return await db.find();
-}
+module.exports.getAllProducts = async (request) => {
+  return db.find();
+};
 
 // search for products (price, limit, brand)
-module.exports.searchProducts = async request => {
-    let query = {};
-    let product_list = {};
+module.exports.searchProducts = async (request) => {
+  let query = {};
+  const { brand = "all", price = "all", limit = 12 } = request.query;
 
-    if(request.query.brand !== undefined) {
-        query["brand"] = request.query.brand;
-    }
+  if (brand !== "all") query["brand"] = brand;
 
-    if(request.query.price !== undefined){
-        if(isNaN(parseFloat(request.query.price))){
-            throw new Error('Cannot parse price as float number');
-        }
-        else{
-            query["price"] = {$lte: parseFloat(request.query.price)};
-        }
-    }
+  if (price !== "all") {
+    if (isNaN(parseFloat(price)) || parseFloat(price) < 0)
+      throw new Error("Cannot parse price as float number.");
+    else query["price"] = { $lte: parseFloat(price) };
+  }
+  console.log("here");
+  if (isNaN(parseInt(limit)) || parseInt(limit) < 0)
+    throw new Error("Cannot parse limit.");
 
-    let found = await db.sort(query, {"price": 1})
-
-    if(request.query.limit !== undefined) {
-        if(isNaN(parseInt(request.query.limit))) {
-            throw new Error('Cannot parse limit as int number');
-        }
-        else{
-            product_list["limit"] = parseInt(request.query.limit);
-            product_list["total"] = found.length;
-            product_list["results"] = found.slice(0, request.query.limit);
-        }
-    }
-    else{
-        product_list["limit"] = 12;
-        product_list["total"] = found.length;
-        product_list["results"] = found.slice(0, 12);
-    }
-
-    return product_list
-}
+  return db.find_sort_limit(query, { price: 1 }, parseInt(limit));
+};
 
 // product by id
-module.exports.findByProductId = async request => {
-    const id = request.params.id;
-    let products = db.find({_id: id});
-    if(products.length === 0){
-        throw new Error('Non existing product.');
-    }
-    else{ return products; }
-}
+module.exports.findByProductId = async (request) => {
+  const id = request.params.id;
+  let products = db.find({ _id: id });
+  if (products.length === 0) {
+    throw new Error("Non existing product.");
+  }
 
-module.exports.loadAllProductsWithPage = async request => {
-    let product_list = {};
-    let limit = request.query.limit;
-    let page = request.query.page;
+  return products;
+};
 
-    if (limit === undefined) limit = 12;
-    else {
-        if (limit <= 0 || isNaN(parseInt(limit))){
-            throw new Error("Cannot parse limit.");
-        }
-    }
+module.exports.loadAllProductsWithPage = async (request) => {
+  const { limit = 12, page = 1 } = request.query;
 
-    if (page === undefined) page = 1;
-    else{
-        if (page <= 0 || isNaN(parseInt(page))){
-            throw new Error("Cannot parse page.");
-        }
-    }
+  if (limit <= 0 || isNaN(parseInt(limit))) {
+    throw new Error("Cannot parse limit.");
+  }
 
-    product_list = await db.loadPage(parseInt(limit), parseInt(page));
-    return product_list
-}
+  if (page <= 0 || isNaN(parseInt(page))) {
+    throw new Error("Cannot parse page.");
+  }
+
+  return db.loadPage(parseInt(limit), parseInt(page));
+};

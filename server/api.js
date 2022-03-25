@@ -1,9 +1,8 @@
 const cors = require("cors");
 const express = require("express");
 const helmet = require("helmet");
-console.log("test");
 const service = require("./service");
-console.log("here");
+const { request, response } = require("express");
 const PORT = 8092;
 
 const app = express();
@@ -15,6 +14,10 @@ app.use(cors());
 app.use(helmet());
 
 app.options("*", cors());
+
+app.get("/", (request, response) => {
+  response.send({ status: "online" });
+});
 
 app.get("/loadAllProductsWithPage", async (request, response) => {
   try {

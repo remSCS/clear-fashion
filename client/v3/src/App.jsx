@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Typography, AppBar,Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container } from '@material-ui/core';
+import { Typography, AppBar, Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Toolbar, Container } from '@mui/material';
 
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -8,18 +8,23 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import { makeStyles } from "@material-ui/core/styles";
+import useStyles from "./styles";
 
-const useStyles=makeStyles((theme)=>({
-    
-}));
 
 
 const App = () => {
-    // Permet de définir des styles 
+    // Permet de définir des styles aux boutons, listes déroulantes ...
     const classes = useStyles();
+
     // Variables d'états
-    const [X, setX] = useState("");
+    const [productList,setProductList]=useState([]);    // la BDD avec tous les produits
+    const [pageNumber,setPageNumber]=useState(0);       // le numéro de la page actuelle
+    const[totalNbPages,setTotalNbPages]=useState(0);    // nombre total de page
+    const [sortBy, setSortBy] = useState("");           // critère pour tri (prix ascendant/descendant, date de sortie)
+    const [specificBrand,setSpecificBrand]=useState("");    // filtre par marque
+    const [favoriteProducts,setFavoriteProducts]=useState([]);  // liste des produits favoris
+
+
 
 
     //Fonctions qui gèrent les changements
@@ -32,6 +37,8 @@ const App = () => {
         // setClients(updatedClients);
     };
 
+    
+
     // Affichage HTML
     return (
         <>
@@ -42,14 +49,14 @@ const App = () => {
                 </Toolbar>
             </AppBar>
             <main>
-                <div>
+                <div className={classes.container}>
                     <Container maxWidth="sm">
                         <Typography variant="h2" align="center" color="textPrimary" gutterBottom>Clothes</Typography>
 
                     </Container>
                 </div>
                 <div>
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <FormControl sx={{ m: 1, minWidth: 120 }} >
                         <InputLabel id="select-brand-label">Brand</InputLabel>
                         <Select
                             labelId="select-brand-label"
@@ -86,14 +93,26 @@ const App = () => {
                     </FormControl>
                 </div>
                 <div>
-                    <Grid container spacing={2} justify="center">
-                        <Grid item>
-                            <Button variant="contained" color="primary">
-
-                            </Button>
+                <Container className={classes.cardGrid} >
+                        <Grid container spacing={4}>
+                            <Grid item xs={4}>
+                                <Card className={classes.card}>
+                                    <CardMedia className={classes.cardMedia} image="https://source.unsplash.com/random" title="image_title" />
+                                    <CardContent className={classes.cardContent}>
+                                        <Typography gutterBottom variant="h5">Product link & name</Typography>
+                                        <Typography variant="h6">Brand</Typography>
+                                        <Typography variant="h7">Price €</Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small" color="primary">Add to favorite</Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </Container>
                 </div>
+                   
+
             </main>
         </>
     )

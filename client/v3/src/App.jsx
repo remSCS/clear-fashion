@@ -25,7 +25,16 @@ const App = () => {
     const [specificBrand, setSpecificBrand] = useState("");    // filtre par marque
     const [favoriteProducts, setFavoriteProducts] = useState([]);  // liste des produits favoris
 
+    const getProducts=async ()=>{
+        const products=await fetchProducts();
+        console.log("final",products);
+    }
+
+    getProducts()
+
     
+
+        
 
 
     //Fonctions qui gèrent les changements

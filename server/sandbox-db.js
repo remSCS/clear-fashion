@@ -70,7 +70,7 @@ async function sandbox () {
     console.log(lessThan50);
 
     // Requete 3: Find all products sorted by price
-    const sortProduct = await db.sort({},{"price":1});
+    const sortProduct = await db.find_sort_limit({},{"price":1});
     console.log(`📚 ${sortProduct.length} total of products sorted`);
     console.log(sortProduct);
 

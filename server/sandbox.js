@@ -22,6 +22,7 @@ async function dedicatedScrape (eshop = 'https://www.dedicatedbrand.com/en/men/n
         process.exit(1);
     }
 }
+
 async function montlimartScrape (eshop = 'https://www.montlimart.com/polos-t-shirts.html') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
@@ -40,9 +41,6 @@ async function montlimartScrape (eshop = 'https://www.montlimart.com/polos-t-shi
     process.exit(1);
   }
 }
-
-
-
 
 async function adresseScrape (eshop = 'https://adresse.paris/583-manteaux-et-blousons') {
   try {

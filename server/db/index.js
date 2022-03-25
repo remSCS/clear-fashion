@@ -70,11 +70,11 @@ module.exports.find = async query => {
   }
 };
 
-module.exports.sort = async (query1,query2) => {
+module.exports.find_sort_limit = async (query1, query2, limit = 0) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    return await collection.find(query1).sort(query2).toArray();
+    return await collection.find(query1).sort(query2).limit(limit).toArray();
 
   } catch (error) {
     console.error('🚨 collection.find...', error);
@@ -86,7 +86,6 @@ module.exports.loadPage = async (limit, page) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    //console.log(page, limit);
     return await collection.find().skip((page-1)*limit).limit(limit).toArray();
 
   } catch (error) {

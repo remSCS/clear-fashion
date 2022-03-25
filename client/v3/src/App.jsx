@@ -9,6 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import useStyles from "./styles";
+import fetchProducts from "./products";
 
 
 
@@ -24,7 +25,7 @@ const App = () => {
     const [specificBrand, setSpecificBrand] = useState("");    // filtre par marque
     const [favoriteProducts, setFavoriteProducts] = useState([]);  // liste des produits favoris
 
-
+    
 
 
     //Fonctions qui gèrent les changements

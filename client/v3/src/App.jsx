@@ -17,12 +17,12 @@ const App = () => {
     const classes = useStyles();
 
     // Variables d'états
-    const [productList,setProductList]=useState([]);    // la BDD avec tous les produits
-    const [pageNumber,setPageNumber]=useState(0);       // le numéro de la page actuelle
-    const[totalNbPages,setTotalNbPages]=useState(0);    // nombre total de page
+    const [productList, setProductList] = useState([]);    // la BDD avec tous les produits
+    const [pageNumber, setPageNumber] = useState(0);       // le numéro de la page actuelle
+    const [totalNbPages, setTotalNbPages] = useState(0);    // nombre total de page
     const [sortBy, setSortBy] = useState("");           // critère pour tri (prix ascendant/descendant, date de sortie)
-    const [specificBrand,setSpecificBrand]=useState("");    // filtre par marque
-    const [favoriteProducts,setFavoriteProducts]=useState([]);  // liste des produits favoris
+    const [specificBrand, setSpecificBrand] = useState("");    // filtre par marque
+    const [favoriteProducts, setFavoriteProducts] = useState([]);  // liste des produits favoris
 
 
 
@@ -37,7 +37,7 @@ const App = () => {
         // setClients(updatedClients);
     };
 
-    
+
 
     // Affichage HTML
     return (
@@ -93,25 +93,29 @@ const App = () => {
                     </FormControl>
                 </div>
                 <div>
-                <Container className={classes.cardGrid} >
+                    <Container className={classes.cardGrid} >
                         <Grid container spacing={4}>
-                            <Grid item xs={4}>
-                                <Card className={classes.card}>
-                                    <CardMedia className={classes.cardMedia} image="https://source.unsplash.com/random" title="image_title" />
-                                    <CardContent className={classes.cardContent}>
-                                        <Typography gutterBottom variant="h5">Product link & name</Typography>
-                                        <Typography variant="h6">Brand</Typography>
-                                        <Typography variant="h7">Price €</Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small" color="primary">Add to favorite</Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
+                            {
+                                productList.map(product => (
+                                    <Grid item xs={4}>
+                                        <Card className={classes.card}>
+                                            <CardMedia className={classes.cardMedia} image="https://source.unsplash.com/random" title="image_title" />
+                                            <CardContent className={classes.cardContent}>
+                                                <Typography gutterBottom variant="h5">Product link & name</Typography>
+                                                <Typography variant="h6">Brand</Typography>
+                                                <Typography variant="h7">Price €</Typography>
+                                            </CardContent>
+                                            <CardActions>
+                                                <Button size="small" color="primary">Add to favorite</Button>
+                                            </CardActions>
+                                        </Card>
+                                    </Grid>
+                                ))
+                            }
                         </Grid>
                     </Container>
                 </div>
-                   
+
 
             </main>
         </>

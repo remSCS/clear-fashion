@@ -13,7 +13,7 @@ const parse = (data) => {
 
       return {
         link,
-        brand: "dedicated",
+        brand: "Dedicated",
         price: parseFloat(
           $(element).find(".productList-price").text().trim().replace("EUR", "")
         ),
@@ -47,3 +47,10 @@ module.exports.scrape = async (url) => {
     return null;
   }
 };
+//
+// p = this.scrape("https://adresse.paris/630-toute-la-collection").then(
+//   (result) => {
+//     console.log(result);
+//   }
+// );
+// p;

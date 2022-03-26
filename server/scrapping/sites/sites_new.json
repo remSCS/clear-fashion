@@ -1,0 +1,21 @@
+{
+  "dedicated": [
+    "https://www.dedicatedbrand.com/en/women/basics",
+    "https://www.dedicatedbrand.com/en/women/sweats",
+    "https://www.dedicatedbrand.com/en/women/bottoms",
+    "https://www.dedicatedbrand.com/en/women/underwear",
+    "https://www.dedicatedbrand.com/en/women/shirts",
+    "https://www.dedicatedbrand.com/en/men/t-shirts",
+    "https://www.dedicatedbrand.com/en/men/sweats",
+    "https://www.dedicatedbrand.com/en/men/shirts",
+    "https://www.dedicatedbrand.com/en/men/bottom"
+  ],
+  "loom": ["https://www.loom.fr/collections/hauts-homme"],
+  "montlimart": [
+    "https://www.montlimart.com/polos-t-shirts.html",
+    "https://www.montlimart.com/pulls-sweats.html",
+    "https://www.montlimart.com/chemises.html",
+    "https://www.montlimart.com/chaussures.html"
+  ],
+  "adresse": ["https://adresse.paris/630-toute-la-collection", "https://adresse.paris/630-toute-la-collection?p=2"]
+}

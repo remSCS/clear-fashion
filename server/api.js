@@ -19,17 +19,20 @@ app.get("/", (request, response) => {
   response.send({ status: "online" });
 });
 
-app.get("/loadAllProductsWithPage", async (request, response) => {
+app.get("/loadClientProducts_filtered", async (request, response) => {
   try {
-    let resp = await service.loadAllProductsWithPage(request);
+    let resp = await service.loadClientProducts_filtered(request);
     response.send(resp);
   } catch (e) {
     switch (e.message) {
-      case "Cannot parse limit.":
+      case "Cannot parse limit as a int number.":
         response.status(404).send("Check your limit.");
         break;
-      case "Cannot parse page.":
+      case "Cannot parse page as int number.":
         response.status(404).send("Check your page number.");
+        break;
+      case "Cannot parse price as a float number.":
+        response.status(404).send("Check your price.");
         break;
       default:
         response.sendStatus(404);
@@ -37,6 +40,25 @@ app.get("/loadAllProductsWithPage", async (request, response) => {
     }
   }
 });
+
+// app.get("/loadClientProducts", async (request, response) => {
+//   try {
+//     let resp = await service.loadAllProductsWithPage(request);
+//     response.send(resp);
+//   } catch (e) {
+//     switch (e.message) {
+//       case "Cannot parse limit.":
+//         response.status(404).send("Check your limit.");
+//         break;
+//       case "Cannot parse page.":
+//         response.status(404).send("Check your page number.");
+//         break;
+//       default:
+//         response.sendStatus(404);
+//         break;
+//     }
+//   }
+// });
 
 app.get("/products", async (request, response) => {
   try {

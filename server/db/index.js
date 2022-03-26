@@ -75,23 +75,35 @@ module.exports.find = async (query) => {
   }
 };
 
-module.exports.find_sort_limit = async (query1, query2, limit = 0) => {
+module.exports.loadClientProducts_filtered = async (
+  query,
+  sorters,
+  limit = 0,
+  page = 1
+) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    return await collection.find(query1).sort(query2).limit(limit).toArray();
+    let result = await collection
+      .find(query)
+      .skip((page - 1) * limit)
+      .sort(sorters)
+      .limit(limit)
+      .toArray();
+
+    return result;
   } catch (error) {
     console.error("🚨 collection.find...", error);
     return null;
   }
 };
 
-module.exports.loadPage = async (limit, page) => {
+module.exports.loadClientProducts = async (query, limit = 0, page = 1) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    return await collection
-      .find()
+    let result = await collection
+      .find(query)
       .skip((page - 1) * limit)
       .limit(limit)
       .toArray();

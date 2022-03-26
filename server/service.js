@@ -35,16 +35,38 @@ module.exports.findByProductId = async (request) => {
   return products;
 };
 
-module.exports.loadAllProductsWithPage = async (request) => {
-  const { limit = 12, page = 1 } = request.query;
+module.exports.loadClientProducts = async (request) => {
+  const { size = 12, page = 1, brand = "" } = request.query;
 
-  if (limit <= 0 || isNaN(parseInt(limit))) {
-    throw new Error("Cannot parse limit.");
-  }
+  if (parseInt(size) <= 0 || isNaN(parseInt(size)))
+    throw new Error("Cannot parse limit as a int number.");
 
-  if (page <= 0 || isNaN(parseInt(page))) {
-    throw new Error("Cannot parse page.");
-  }
+  if (parseInt(page) <= 0 || isNaN(parseInt(page)))
+    throw new Error("Cannot parse page as a int number.");
 
-  return db.loadPage(parseInt(limit), parseInt(page));
+  return db.loadClientProducts(
+    brand ? { brand: brand } : {},
+    parseInt(size),
+    parseInt(page)
+  );
+};
+
+module.exports.loadClientProducts_filtered = async (request) => {
+  const { size = 12, page = 1, brand = "", price = 1 } = request.query;
+
+  if (parseInt(size) <= 0 || isNaN(parseInt(size)))
+    throw new Error("Cannot parse limit as a int number.");
+
+  if (parseInt(page) <= 0 || isNaN(parseInt(page)))
+    throw new Error("Cannot parse page as a int number.");
+
+  if (isNaN(parseInt(price)) || (parseInt(price) != -1 && parseInt(price) != 1))
+    throw new Error("Cannot parse price as a float number.");
+
+  return db.loadClientProducts_filtered(
+    brand ? { brand: brand } : {},
+    { price: parseInt(price) },
+    parseInt(size),
+    parseInt(page)
+  );
 };

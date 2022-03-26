@@ -84,14 +84,12 @@ module.exports.loadClientProducts_filtered = async (
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    let result = await collection
+    return await collection
       .find(query)
       .skip((page - 1) * limit)
       .sort(sorters)
       .limit(limit)
       .toArray();
-
-    return result;
   } catch (error) {
     console.error("🚨 collection.find...", error);
     return null;
@@ -102,7 +100,9 @@ module.exports.loadClientProducts = async (query, limit = 0, page = 1) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    let result = await collection
+    console.log("here");
+    console.log(limit, page, query);
+    return await collection
       .find(query)
       .skip((page - 1) * limit)
       .limit(limit)

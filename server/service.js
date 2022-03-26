@@ -37,13 +37,13 @@ module.exports.findByProductId = async (request) => {
 
 module.exports.loadClientProducts = async (request) => {
   const { size = 12, page = 1, brand = "" } = request.query;
-
   if (parseInt(size) <= 0 || isNaN(parseInt(size)))
     throw new Error("Cannot parse limit as a int number.");
 
   if (parseInt(page) <= 0 || isNaN(parseInt(page)))
     throw new Error("Cannot parse page as a int number.");
 
+  console.log(brand, size, page);
   return db.loadClientProducts(
     brand ? { brand: brand } : {},
     parseInt(size),

@@ -1,5 +1,5 @@
 /* eslint-disable no-console, no-process-exit */
-const service = require("./sandbox_sevice");
+const service = require("./sandbox_service");
 const db = require("../db");
 const data_json = require("./sites/sites.json");
 const { each } = require("cheerio/lib/api/traversing");

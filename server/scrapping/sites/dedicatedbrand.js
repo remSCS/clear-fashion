@@ -40,8 +40,7 @@ module.exports.scrape = async (url) => {
       return parse(body);
     }
     console.error(response);
-
-    return null;
+    return;
   } catch (error) {
     console.error(error);
     return null;

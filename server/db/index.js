@@ -1,6 +1,4 @@
-require("dotenv").config(
-  "D:\\Documents\\OneDrive - De Vinci\\Cours\\S8\\Web Application Architectures\\clear-fashion\\server\\.env"
-);
+require("dotenv").config();
 const { MongoClient } = require("mongodb");
 const fs = require("fs");
 
@@ -22,7 +20,6 @@ const getDB = (module.exports.getDB = async () => {
       return database;
     }
 
-    console.log(process.env);
     console.log("Mongo URI:", MONGODB_URI);
     client = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true });
     database = client.db(MONGODB_DB_NAME);
@@ -44,9 +41,14 @@ module.exports.insert = async (products) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    return await collection.insertMany(products.slice(0, -1), {
-      ordered: false,
-    });
+    return await collection.insertMany(
+      products.filter((p) => {
+        return p != null;
+      }),
+      {
+        ordered: false,
+      }
+    );
   } catch (error) {
     error.result;
     console.error("🚨 collection.insertMany...", error);

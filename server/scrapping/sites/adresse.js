@@ -44,8 +44,7 @@ module.exports.scrape = async (url) => {
     }
 
     console.error(response);
-
-    return null;
+    return;
   } catch (error) {
     console.error(error);
     return null;

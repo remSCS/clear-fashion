@@ -1,9 +1,8 @@
 const cors = require("cors");
 const express = require("express");
 const helmet = require("helmet");
-console.log("test");
 const service = require("./service");
-console.log("here");
+const { request, response } = require("express");
 const PORT = 8092;
 
 const app = express();
@@ -16,17 +15,43 @@ app.use(helmet());
 
 app.options("*", cors());
 
-app.get("/loadAllProductsWithPage", async (request, response) => {
+app.get("/", (request, response) => {
+  response.send({ status: "online" });
+});
+
+app.get("/loadClientProducts", async (request, response) => {
   try {
-    let resp = await service.loadAllProductsWithPage(request);
+    let resp = await service.loadClientProducts(request);
     response.send(resp);
   } catch (e) {
     switch (e.message) {
-      case "Cannot parse limit.":
+      case "Cannot parse limit as a int number.":
         response.status(404).send("Check your limit.");
         break;
-      case "Cannot parse page.":
+      case "Cannot parse page as a int number.":
         response.status(404).send("Check your page number.");
+        break;
+      default:
+        response.sendStatus(404);
+        break;
+    }
+  }
+});
+
+app.get("/loadClientProducts_filtered", async (request, response) => {
+  try {
+    let resp = await service.loadClientProducts_filtered(request);
+    response.send(resp);
+  } catch (e) {
+    switch (e.message) {
+      case "Cannot parse limit as a int number.":
+        response.status(404).send("Check your limit.");
+        break;
+      case "Cannot parse page as int number.":
+        response.status(404).send("Check your page number.");
+        break;
+      case "Cannot parse price as a float number.":
+        response.status(404).send("Check your price.");
         break;
       default:
         response.sendStatus(404);

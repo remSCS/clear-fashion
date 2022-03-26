@@ -37,12 +37,12 @@ const App = () => {
   // Variables d'états
   const [productList, setProductList] = useState([]); // les produits affichés sur une page
   const [pageNumber, setPageNumber] = useState(0); // le numéro de la page actuelle
-  const [totalNbPages, setTotalNbPages] = useState(0); // nombre total de page
+  const [totalNbPages, setTotalNbPages] = useState(1); // nombre total de pages
   const [nbProductsPerPage, setNbProductsPerPage] = useState(12); // Le nombre de produits affichés par page (12,24,48)
-  const [sortBy, setSortBy] = useState(""); // critère pour tri (prix ascendant/descendant, date de sortie)
-  const [specificBrand, setSpecificBrand] = useState(""); // filtre par marque
+  const [sortBy, setSortBy] = useState(0); // critère pour tri (prix ascendant=1, descendant=-1, aucun tri=0)
+  const [specificBrand, setSpecificBrand] = useState(""); // filtrer par marque
   const [favoriteProducts, setFavoriteProducts] = useState([]); // liste des produits favoris
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);  // permet de ne pas reinitialiser la liste des produits constamment 
   // const products=await fetchProducts();
   // setProductList(products);
   // console.log("final",products);
@@ -57,10 +57,9 @@ const App = () => {
   };
 
   initializeProducts();
+  
 
-  const handleNbProductsPerPage = (event, nb) => {
-    setNbProductsPerPage(nb);
-  };
+  
 
   const handlePageNumber=(event,pageNb)=>{
       setPageNumber(pageNb);
@@ -70,21 +69,35 @@ const App = () => {
       setTotalNbPages(total);
   }
 
-  const 
+  const handleNbProductsPerPage = (event,nb) => { // OPERATIONNEL
+    setNbProductsPerPage(nb);
+  };
 
-  //Fonctions qui gèrent les changements
-  const handleDelete = (id) => {
+  const handleSortBy = (event)=>{   // OPERATIONNEL
+      setSortBy(event.target.value);
+      console.log(event.target.value);
+  }
+
+  const handleSpecificBrand =(event)=>{ // OPERATIONNEL
+      setSpecificBrand(event.target.value);
+  }
+
+  const handleFavoriteProducts=(event)=>{
+      
+  }
+
+
+  //const handleDelete = (id) => {
     // const updatedClients = [...clients];
     // const index = updatedClients.findIndex(client => client.id === id);
     // updatedClients.splice(index, 1);
     // setClients(updatedClients);
-  };
+  //};
 
   // Affichage HTML
   return (
     <>
       <CssBaseline />
-
       <main>
         <div className={classes.container}>
           <Container maxWidth="sm">
@@ -94,7 +107,7 @@ const App = () => {
               color="textPrimary"
               gutterBottom
             >
-              Clothes
+              Products
             </Typography>
           </Container>
         </div>
@@ -104,17 +117,17 @@ const App = () => {
             <Select
               labelId="select-brand-label"
               id="select-brand"
-              //value={age}
-              //onChange={handleChange}
+              value={specificBrand}
+              onChange={handleSpecificBrand}
               label="Brand"
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value="adresse">Adresse Paris</MenuItem>
-              <MenuItem value="dedicated">Dedicated</MenuItem>
-              <MenuItem value="loom">Loom</MenuItem>
-              <MenuItem value="montlimart">Montlimart</MenuItem>
+              <MenuItem value="Adresse Paris">Adresse Paris</MenuItem>
+              <MenuItem value="Dedicated">Dedicated</MenuItem>
+              <MenuItem value="Loom">Loom</MenuItem>
+              <MenuItem value="Montlimart">Montlimart</MenuItem>
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -122,15 +135,15 @@ const App = () => {
             <Select
               labelId="select-sort-label"
               id="select-sort"
-              //value={age}
-              //onChange={handleChange}
+              value={sortBy}
+              onChange={handleSortBy}
               label="Sort"
             >
-              <MenuItem value="">
+              <MenuItem value={0}>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={"price-asc"}>Price Low-High</MenuItem>
-              <MenuItem value={"price-desc"}>Price High-Low</MenuItem>
+              <MenuItem value={1}>Price Low-High</MenuItem>
+              <MenuItem value={-1}>Price High-Low</MenuItem>
             </Select>
           </FormControl>
           <FormControlLabel
@@ -167,14 +180,14 @@ const App = () => {
             <Grid container spacing={4}>
               {productList.map((product) => (
                 <Grid item xs={4} key={product._id}>
-                  <Card className={classes.card}>
+                  <Card className={classes.card} >
                     <CardMedia
                       className={classes.cardMedia}
                       image={product.photo}
                       title="image_title"
                     />
                     <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant="h5">
+                      <Typography gutterBottom variant="h5" >
                         {product.name}
                       </Typography>
                       <Typography variant="h6">{product.brand}</Typography>
@@ -200,7 +213,7 @@ const App = () => {
             height: "30vh",
           }}
         >
-          <Pagination className={classes.pagination} count={10} />
+          <Pagination className={classes.pagination} count={totalNbPages} />
         </div>
       </main>
     </>

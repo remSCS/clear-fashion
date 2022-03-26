@@ -42,7 +42,7 @@ const App = () => {
   const [sortBy, setSortBy] = useState(0); // critère pour tri (prix ascendant=1, descendant=-1, aucun tri=0)
   const [specificBrand, setSpecificBrand] = useState(""); // filtrer par marque
   const [favoriteProducts, setFavoriteProducts] = useState([]); // liste des produits favoris
-  const [isLoaded, setIsLoaded] = useState(false);  // permet de ne pas reinitialiser la liste des produits constamment 
+  const [isLoaded, setIsLoaded] = useState(false); // permet de ne pas reinitialiser la liste des produits constamment
   // const products=await fetchProducts();
   // setProductList(products);
   // console.log("final",products);
@@ -57,41 +57,40 @@ const App = () => {
   };
 
   initializeProducts();
-  
 
-  
+  const handlePageNumber = (event, pageNb) => {
+    setPageNumber(pageNb);
+  };
 
-  const handlePageNumber=(event,pageNb)=>{
-      setPageNumber(pageNb);
-  }
+  const handleTotalNbPages = (event, total) => {
+    setTotalNbPages(total);
+  };
 
-  const handleTotalNbPages=(event,total)=>{
-      setTotalNbPages(total);
-  }
-
-  const handleNbProductsPerPage = (event,nb) => { // OPERATIONNEL
+  const handleNbProductsPerPage = (event, nb) => {
+    // OPERATIONNEL
     setNbProductsPerPage(nb);
   };
 
-  const handleSortBy = (event)=>{   // OPERATIONNEL
-      setSortBy(event.target.value);
-      console.log(event.target.value);
-  }
+  const handleSortBy = (event) => {
+    // OPERATIONNEL
+    setSortBy(event.target.value);
+    console.log(event.target.value);
+  };
 
-  const handleSpecificBrand =(event)=>{ // OPERATIONNEL
-      setSpecificBrand(event.target.value);
-  }
+  const handleSpecificBrand = (event) => {
+    // OPERATIONNEL
+    setSpecificBrand(event.target.value);
+  };
 
-  const handleFavoriteProducts=(event)=>{
-      
-  }
-
+  const handleFavoriteProducts = (product) => {
+    console.log(product);
+  };
 
   //const handleDelete = (id) => {
-    // const updatedClients = [...clients];
-    // const index = updatedClients.findIndex(client => client.id === id);
-    // updatedClients.splice(index, 1);
-    // setClients(updatedClients);
+  // const updatedClients = [...clients];
+  // const index = updatedClients.findIndex(client => client.id === id);
+  // updatedClients.splice(index, 1);
+  // setClients(updatedClients);
   //};
 
   // Affichage HTML
@@ -151,13 +150,13 @@ const App = () => {
               <Checkbox
                 icon={<FavoriteBorder />}
                 checkedIcon={<Favorite />}
-                sx={{ m:1,"& .MuiSvgIcon-root": { fontSize: 32 } }}
+                sx={{ m: 1, "& .MuiSvgIcon-root": { fontSize: 32 } }}
               />
             }
             label="Favorite products"
           />
 
-          <FormControl sx={{ m:1, float: "right" }}>
+          <FormControl sx={{ m: 1, float: "right" }}>
             <ToggleButtonGroup
               color="primary"
               value={nbProductsPerPage}
@@ -180,14 +179,14 @@ const App = () => {
             <Grid container spacing={4}>
               {productList.map((product) => (
                 <Grid item xs={4} key={product._id}>
-                  <Card className={classes.card} >
+                  <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
                       image={product.photo}
                       title="image_title"
                     />
                     <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant="h5" >
+                      <Typography gutterBottom variant="h5">
                         {product.name}
                       </Typography>
                       <Typography variant="h6">{product.brand}</Typography>
@@ -197,6 +196,7 @@ const App = () => {
                       <Checkbox
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite />}
+                        onChange={()=>handleFavoriteProducts(product)}
                       />
                     </CardActions>
                   </Card>

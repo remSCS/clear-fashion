@@ -41,18 +41,15 @@ const App = () => {
   const [nbProductsPerPage, setNbProductsPerPage] = useState(12); // Le nombre de produits affichés par page (12,24,48)
   const [sortBy, setSortBy] = useState(0); // critère pour tri (prix ascendant=1, descendant=-1, aucun tri=0)
   const [specificBrand, setSpecificBrand] = useState(""); // filtrer par marque
-  const [favoriteProducts, setFavoriteProducts] = useState([]); // liste des produits favoris
+  const [favoriteProducts, setFavoriteProducts] = useState(['b23672a4-a973-5269-a527-8aa58dc559a1','269391d8-16ba-5931-95c0-2833d5584410']); // liste des produits favoris
   const [isLoaded, setIsLoaded] = useState(false); // permet de ne pas reinitialiser la liste des produits constamment
-  // const products=await fetchProducts();
-  // setProductList(products);
-  // console.log("final",products);
+
 
   const initializeProducts = async () => {
     if (!isLoaded) {
       const products = await fetchProducts();
       setProductList(products);
       setIsLoaded(true);
-      //console.log(products[0]);
     }
   };
 
@@ -82,18 +79,38 @@ const App = () => {
     setSpecificBrand(event.target.value);
   };
 
-  const handleFavoriteProducts = (product) => {
-    console.log(product);
+  const handleFavoriteProducts = (id) => {
+    if(productIsFavorite(id))// Si le produits était dans les favoris, alors on le retire après le click
+    {
+      handleDeleteFavoriteProducts(id);
+    }
+    else  // S'il ne l'était pas, alors on le rajoute aux favoris
+    {
+      handleAddFavoriteProducts(id);
+    }
   };
 
-  //const handleDelete = (id) => {
-  // const updatedClients = [...clients];
-  // const index = updatedClients.findIndex(client => client.id === id);
-  // updatedClients.splice(index, 1);
-  // setClients(updatedClients);
-  //};
+  const handleDeleteFavoriteProducts=(id)=>{
+    const newFavoriteProducts=[...favoriteProducts];
+    setFavoriteProducts(newFavoriteProducts.filter(x=>x!=id))
+  }
 
-  // Affichage HTML
+  const handleAddFavoriteProducts=(id)=>{
+    const newFavoriteProducts= [...favoriteProducts];
+    newFavoriteProducts.push(id);
+    setFavoriteProducts(newFavoriteProducts);
+  }
+
+  const productIsFavorite=(id)=>{
+    let isFav=false;
+    if(favoriteProducts.includes(id)){
+      isFav=true;
+    }
+    return isFav;
+  }
+
+  // --------------------- Affichage du site ---------------------
+
   return (
     <>
       <CssBaseline />
@@ -196,7 +213,9 @@ const App = () => {
                       <Checkbox
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite />}
-                        onChange={()=>handleFavoriteProducts(product)}
+                        //checked={() => productIsFavorite(product._id)}
+                        checked={productIsFavorite(product._id)}
+                        onChange={() => {handleFavoriteProducts(product._id)}}
                       />
                     </CardActions>
                   </Card>

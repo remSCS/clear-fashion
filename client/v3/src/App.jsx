@@ -19,6 +19,7 @@ import {
   MenuItem,
   FormControl,
   Select,
+  Link,
   Box,
   ToggleButtonGroup,
   ToggleButton,
@@ -41,8 +42,9 @@ const App = () => {
   const [nbProductsPerPage, setNbProductsPerPage] = useState(12); // Le nombre de produits affichés par page (12,24,48)
   const [sortBy, setSortBy] = useState(0); // critère pour tri (prix ascendant=1, descendant=-1, aucun tri=0)
   const [specificBrand, setSpecificBrand] = useState(""); // filtrer par marque
-  const [favoriteProducts, setFavoriteProducts] = useState(['b23672a4-a973-5269-a527-8aa58dc559a1','269391d8-16ba-5931-95c0-2833d5584410']); // liste des produits favoris
+  const [favoriteProducts, setFavoriteProducts] = useState([]); // liste des produits favoris
   const [isLoaded, setIsLoaded] = useState(false); // permet de ne pas reinitialiser la liste des produits constamment
+  const [displayFavProducts,setDisplayFavProducts]=useState(false);
 
 
   const initializeProducts = async () => {
@@ -80,33 +82,42 @@ const App = () => {
   };
 
   const handleFavoriteProducts = (id) => {
-    if(productIsFavorite(id))// Si le produits était dans les favoris, alors on le retire après le click
-    {
+    if (productIsFavorite(id)) {
+      // Si le produits était dans les favoris, alors on le retire après le click
       handleDeleteFavoriteProducts(id);
-    }
-    else  // S'il ne l'était pas, alors on le rajoute aux favoris
-    {
+    } // S'il ne l'était pas, alors on le rajoute aux favoris
+    else {
       handleAddFavoriteProducts(id);
     }
   };
 
-  const handleDeleteFavoriteProducts=(id)=>{
-    const newFavoriteProducts=[...favoriteProducts];
-    setFavoriteProducts(newFavoriteProducts.filter(x=>x!=id))
-  }
+  const handleDeleteFavoriteProducts = (id) => {
+    const newFavoriteProducts = [...favoriteProducts];
+    setFavoriteProducts(newFavoriteProducts.filter((x) => x != id));
+  };
 
-  const handleAddFavoriteProducts=(id)=>{
-    const newFavoriteProducts= [...favoriteProducts];
+  const handleAddFavoriteProducts = (id) => {
+    const newFavoriteProducts = [...favoriteProducts];
     newFavoriteProducts.push(id);
     setFavoriteProducts(newFavoriteProducts);
-  }
+  };
 
-  const productIsFavorite=(id)=>{
-    let isFav=false;
-    if(favoriteProducts.includes(id)){
-      isFav=true;
+  const productIsFavorite = (id) => {
+    let isFav = false;
+    if (favoriteProducts.includes(id)) {
+      isFav = true;
     }
     return isFav;
+  };
+
+  const handleDisplayFavProducts=(event)=>{
+    console.log(event.target.checked);
+    if(event.target.checked){ // S'il est check, alors on affiche tous les produits favoris
+
+    }
+    else{                     // Sinon, on affiche tous les produits (affichage normal)
+
+    }
   }
 
   // --------------------- Affichage du site ---------------------
@@ -168,6 +179,7 @@ const App = () => {
                 icon={<FavoriteBorder />}
                 checkedIcon={<Favorite />}
                 sx={{ m: 1, "& .MuiSvgIcon-root": { fontSize: 32 } }}
+                onChange={handleDisplayFavProducts}
               />
             }
             label="Favorite products"
@@ -204,7 +216,10 @@ const App = () => {
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5">
-                        {product.name}
+                        {/* {product.name} */}
+                        <Link href={product.link} underline="none">
+                          {product.name}
+                        </Link>
                       </Typography>
                       <Typography variant="h6">{product.brand}</Typography>
                       <Typography variant="h7">{product.price} €</Typography>
@@ -213,9 +228,10 @@ const App = () => {
                       <Checkbox
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite />}
-                        //checked={() => productIsFavorite(product._id)}
                         checked={productIsFavorite(product._id)}
-                        onChange={() => {handleFavoriteProducts(product._id)}}
+                        onChange={() => {
+                          handleFavoriteProducts(product._id);
+                        }}
                       />
                     </CardActions>
                   </Card>

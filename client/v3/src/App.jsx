@@ -35,7 +35,8 @@ const App = () => {
   // Permet de définir des styles aux boutons, listes déroulantes ...
   const classes = useStyles();
 
-  // Variables d'états
+  // ------------------- Variables d'états -------------------
+
   const [productsList, setProductsList] = useState([]); // les produits affichés sur une page
   const [pageNumber, setPageNumber] = useState(0); // le numéro de la page actuelle
   const [totalNbPages, setTotalNbPages] = useState(1); // nombre total de pages
@@ -44,24 +45,32 @@ const App = () => {
   const [specificBrand, setSpecificBrand] = useState(""); // filtrer par marque
   const [favoriteProducts, setFavoriteProducts] = useState([]); // liste des produits favoris
   const [isLoaded, setIsLoaded] = useState(false); // permet de ne pas reinitialiser la liste des produits constamment
-  const [displayFavProducts,setDisplayFavProducts]=useState(false); // permet de savoir si l'utilisateur veut afficher les produits favoris ou non
+  const [displayFavProducts, setDisplayFavProducts] = useState(false); // permet de savoir si l'utilisateur veut afficher les produits favoris ou non
 
-
+  // ----------------------- Fonctions -----------------------
+  
   const initializeProducts = async () => {
-    if(!isLoaded){
-      let products=[]
-      if(displayFavProducts){
-        products=[...favoriteProducts];
-        if(specificBrand!="") products=products.filter(x=>x.brand==specificBrand)
-        if(sortBy!=0){
-          if(sortBy===1) products.sort((a,b)=>a.price-b.price)
-          else if(sortBy===-1) products.sort((a,b)=>b.price-a.price)
+    if (!isLoaded) {
+      // S'il n'est pas encore loaded, alors on peut le load
+
+      let products = [];
+
+      if (displayFavProducts) {
+        // S'il s'agit d'afficher les produits favoris
+
+        products = [...favoriteProducts];
+        if (specificBrand != "")
+          products = products.filter((x) => x.brand == specificBrand); // Si l'utilisateur a selectionné une brand spécifique, alors on filtre
+        if (sortBy != 0) {
+          // Si l'utilisateur a selectionné un sort par prix, alors on sort
+          if (sortBy === 1) products.sort((a, b) => a.price - b.price);
+          else if (sortBy === -1) products.sort((a, b) => b.price - a.price);
         }
         setProductsList(products);
         setIsLoaded(true);
-        console.log("page loaded - favorite products")
-      }
-      else{
+        console.log("page loaded - favorite products");
+      } else {
+        // Afficher tous les produits (non favoris + favoris)
         products = await fetchProducts();
         setProductsList(products);
         setIsLoaded(true);
@@ -82,13 +91,11 @@ const App = () => {
   };
 
   const handleNbProductsPerPage = (event, nb) => {
-    // OPERATIONNEL
     setNbProductsPerPage(nb);
     setIsLoaded(false);
   };
 
   const handleSortBy = (event) => {
-    // OPERATIONNEL
     setSortBy(event.target.value);
     setIsLoaded(false);
   };
@@ -127,17 +134,18 @@ const App = () => {
     return isFav;
   };
 
-  const handleDisplayFavProducts=(event)=>{
+  const handleDisplayFavProducts = (event) => {
     setDisplayFavProducts(event.target.checked);
-    setIsLoaded(false)
-    
-    if(event.target.checked){ // S'il est check, alors on affiche tous les produits favoris
-      console.log("favorite")
+    setIsLoaded(false);
+
+    if (event.target.checked) {
+      // S'il est check, alors on affiche tous les produits favoris
+      console.log("favorite");
+    } else {
+      // Sinon, on affiche tous les produits (affichage normal)
+      console.log("normal");
     }
-    else{                     // Sinon, on affiche tous les produits (affichage normal)
-      console.log("normal")
-    }
-  }
+  };
 
   // --------------------- Affichage du site ---------------------
 

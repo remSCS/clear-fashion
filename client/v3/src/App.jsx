@@ -36,7 +36,7 @@ const App = () => {
   const classes = useStyles();
 
   // Variables d'états
-  const [productList, setProductList] = useState([]); // les produits affichés sur une page
+  const [productsList, setProductsList] = useState([]); // les produits affichés sur une page
   const [pageNumber, setPageNumber] = useState(0); // le numéro de la page actuelle
   const [totalNbPages, setTotalNbPages] = useState(1); // nombre total de pages
   const [nbProductsPerPage, setNbProductsPerPage] = useState(12); // Le nombre de produits affichés par page (12,24,48)
@@ -44,14 +44,29 @@ const App = () => {
   const [specificBrand, setSpecificBrand] = useState(""); // filtrer par marque
   const [favoriteProducts, setFavoriteProducts] = useState([]); // liste des produits favoris
   const [isLoaded, setIsLoaded] = useState(false); // permet de ne pas reinitialiser la liste des produits constamment
-  const [displayFavProducts,setDisplayFavProducts]=useState(false);
+  const [displayFavProducts,setDisplayFavProducts]=useState(false); // permet de savoir si l'utilisateur veut afficher les produits favoris ou non
 
 
   const initializeProducts = async () => {
-    if (!isLoaded) {
-      const products = await fetchProducts();
-      setProductList(products);
-      setIsLoaded(true);
+    if(!isLoaded){
+      let products=[]
+      if(displayFavProducts){
+        products=[...favoriteProducts];
+        if(specificBrand!="") products=products.filter(x=>x.brand==specificBrand)
+        if(sortBy!=0){
+          if(sortBy===1) products.sort((a,b)=>a.price-b.price)
+          else if(sortBy===-1) products.sort((a,b)=>b.price-a.price)
+        }
+        setProductsList(products);
+        setIsLoaded(true);
+        console.log("page loaded - favorite products")
+      }
+      else{
+        products = await fetchProducts();
+        setProductsList(products);
+        setIsLoaded(true);
+        console.log("page loaded");
+      }
     }
   };
 
@@ -111,12 +126,14 @@ const App = () => {
   };
 
   const handleDisplayFavProducts=(event)=>{
-    console.log(event.target.checked);
+    setDisplayFavProducts(event.target.checked);
+    setIsLoaded(false)
+    
     if(event.target.checked){ // S'il est check, alors on affiche tous les produits favoris
-
+      console.log("favorite")
     }
     else{                     // Sinon, on affiche tous les produits (affichage normal)
-
+      console.log("normal")
     }
   }
 
@@ -206,7 +223,7 @@ const App = () => {
         <div>
           <Container className={classes.cardGrid}>
             <Grid container spacing={4}>
-              {productList.map((product) => (
+              {productsList.map((product) => (
                 <Grid item xs={4} key={product._id}>
                   <Card className={classes.card}>
                     <CardMedia

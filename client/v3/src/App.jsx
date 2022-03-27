@@ -74,6 +74,7 @@ const App = () => {
 
   const handlePageNumber = (event, pageNb) => {
     setPageNumber(pageNb);
+    setIsLoaded(false);
   };
 
   const handleTotalNbPages = (event, total) => {
@@ -83,16 +84,18 @@ const App = () => {
   const handleNbProductsPerPage = (event, nb) => {
     // OPERATIONNEL
     setNbProductsPerPage(nb);
+    setIsLoaded(false);
   };
 
   const handleSortBy = (event) => {
     // OPERATIONNEL
     setSortBy(event.target.value);
-    console.log(event.target.value);
+    setIsLoaded(false);
   };
 
   const handleSpecificBrand = (event) => {
     setSpecificBrand(event.target.value);
+    setIsLoaded(false);
   };
 
   const handleFavoriteProducts = (id) => {

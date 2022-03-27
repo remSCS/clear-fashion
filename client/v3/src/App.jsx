@@ -92,7 +92,6 @@ const App = () => {
   };
 
   const handleSpecificBrand = (event) => {
-    // OPERATIONNEL
     setSpecificBrand(event.target.value);
   };
 

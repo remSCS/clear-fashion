@@ -108,9 +108,11 @@ const App = () => {
   const handleFavoriteProducts = (id) => {
     if (productIsFavorite(id)) {
       // Si le produits était dans les favoris, alors on le retire après le click
+      console.log("remove from favorites");
       handleDeleteFavoriteProducts(id);
     } // S'il ne l'était pas, alors on le rajoute aux favoris
     else {
+      console.log("add to favorites");
       handleAddFavoriteProducts(id);
     }
   };
@@ -128,9 +130,7 @@ const App = () => {
 
   const productIsFavorite = (id) => {
     let isFav = false;
-    if (favoriteProducts.includes(id)) {
-      isFav = true;
-    }
+    if (favoriteProducts.includes(id))isFav=true;
     return isFav;
   };
 

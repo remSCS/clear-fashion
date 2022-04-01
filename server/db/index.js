@@ -75,6 +75,17 @@ module.exports.find = async (query) => {
   }
 };
 
+module.exports.loadAllClientProducts=async()=>{
+  try{
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    return await collection.find().toArray();
+  }
+  catch(e){
+    console.error("error in loading all products : ",e)
+  }
+}
+
 module.exports.loadClientProducts_filtered = async (
   query,
   sorters,

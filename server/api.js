@@ -15,34 +15,35 @@ app.use(helmet());
 
 app.options("*", cors());
 
-const allProducts = async () => {
-  const allDB= await service.getAllProducts();
-  //console.log(allDB[0].name)
-  return allDB;
-};
-
-
 app.get("/", (request, response) => {
   response.send({ status: "online" });
 });
 
+// app.get("/loadClientProducts", async (request, response) => {
+//   try {
+//     let resp = await service.loadClientProducts(request);
+//     response.send(resp);
+//   } catch (e) {
+//     switch (e.message) {
+//       case "Cannot parse limit as a int number.":
+//         response.status(404).send("Check your limit.");
+//         break;
+//       case "Cannot parse page as a int number.":
+//         response.status(404).send("Check your page number.");
+//         break;
+//       default:
+//         response.sendStatus(404);
+//         break;
+//     }
+//   }
+// });
 
 app.get("/loadClientProducts", async (request, response) => {
   try {
-    let resp = await service.loadClientProducts(request);
+    let resp = await service.loadClientProducts_V2(request);
     response.send(resp);
   } catch (e) {
-    switch (e.message) {
-      case "Cannot parse limit as a int number.":
-        response.status(404).send("Check your limit.");
-        break;
-      case "Cannot parse page as a int number.":
-        response.status(404).send("Check your page number.");
-        break;
-      default:
-        response.sendStatus(404);
-        break;
-    }
+    response.status(404).send(e);
   }
 });
 

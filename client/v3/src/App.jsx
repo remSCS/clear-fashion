@@ -26,6 +26,7 @@ import fetchProducts from "./products";
 
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
+import { chainPropTypes } from "@mui/utils";
 
 const App = () => {
   // Permet de définir des styles aux boutons, listes déroulantes ...
@@ -34,7 +35,7 @@ const App = () => {
   // ------------------- Variables d'états -------------------
 
   const [productsList, setProductsList] = useState([]); // les produits affichés sur une page
-  const [pageNumber, setPageNumber] = useState(0); // le numéro de la page actuelle
+  const [pageNumber, setPageNumber] = useState(1); // le numéro de la page actuelle
   const [totalNbPages, setTotalNbPages] = useState(1); // nombre total de pages
   const [nbProductsPerPage, setNbProductsPerPage] = useState(12); // Le nombre de produits affichés par page (12,24,48)
   const [sortBy, setSortBy] = useState(0); // critère pour tri (prix ascendant=1, descendant=-1, aucun tri=0)
@@ -43,6 +44,10 @@ const App = () => {
   const [isLoaded, setIsLoaded] = useState(false); // permet de ne pas reinitialiser la liste des produits constamment
   const [displayFavProducts, setDisplayFavProducts] = useState(false); // permet de savoir si l'utilisateur veut afficher les produits favoris ou non
 
+  const[p50,setP50]=useState(0);
+  const[p90,setP90]=useState(0);
+  const[p95,setP95]=useState(0);
+
   // ----------------------- Fonctions -----------------------
   
   const initializeProducts = async () => {
@@ -50,10 +55,10 @@ const App = () => {
       // S'il n'est pas encore loaded, alors on peut le load
 
       let products = [];
+      let meta={};
 
       if (displayFavProducts) {
         // S'il s'agit d'afficher les produits favoris
-
         products = [...favoriteProducts];
         if (specificBrand !== "")
           products = products.filter((x) => x.brand === specificBrand); // Si l'utilisateur a selectionné une brand spécifique, alors on filtre
@@ -63,16 +68,30 @@ const App = () => {
           else if (sortBy === -1) products.sort((a, b) => b.price - a.price);
         }
         setProductsList(products);
+        setP50(pValue(products,50));
+        setP90(pValue(products,90));
+        setP95(pValue(products,95));
         setIsLoaded(true);
         console.log("page loaded - favorite products");
       } else {
         // Afficher tous les produits (non favoris + favoris)
-        products = await fetchProducts();
+        let {products,meta} = await fetchProducts(pageNumber,nbProductsPerPage,specificBrand,sortBy);
+        console.log(meta);
         setProductsList(products);
+        setTotalNbPages(meta.TotalNbPages);
+        setP50(pValue(products,50));
+        setP90(pValue(products,90));
+        setP95(pValue(products,95));
         setIsLoaded(true);
         console.log("page loaded");
       }
+      
     }
+  };
+
+  const pValue=(products,pval)=>{
+    const prod=[...products];
+    return prod.sort((a,b)=>a.price-b.price)[parseInt(prod.length*pval/100)].price
   };
 
   initializeProducts();
@@ -82,9 +101,9 @@ const App = () => {
     setIsLoaded(false);
   };
 
-  const handleTotalNbPages = (event, total) => {
-    setTotalNbPages(total);
-  };
+  // const handleTotalNbPages = (event, total) => {
+  //   setTotalNbPages(total);
+  // };
 
   const handleNbProductsPerPage = (event, nb) => {
     setNbProductsPerPage(nb);
@@ -93,11 +112,13 @@ const App = () => {
 
   const handleSortBy = (event) => {
     setSortBy(event.target.value);
+    setPageNumber(1);
     setIsLoaded(false);
   };
 
   const handleSpecificBrand = (event) => {
     setSpecificBrand(event.target.value);
+    setPageNumber(1);
     setIsLoaded(false);
   };
 
@@ -232,6 +253,11 @@ const App = () => {
               Produits par page :
             </Typography>
           </FormControl>
+          <FormControl sx={{ m: 1, float: "right" }}>
+          <Typography variant="h8" marginTop={1.5}>
+              p50 : <strong>{p50} €</strong> | p90 : <strong>{p90} €</strong> | p95 :<strong>{p95} €</strong> 
+            </Typography>
+          </FormControl>
         </div>
         <div>
           <Container className={classes.cardGrid}>
@@ -278,7 +304,7 @@ const App = () => {
             height: "30vh",
           }}
         >
-          <Pagination className={classes.pagination} count={totalNbPages} />
+          <Pagination className={classes.pagination} page={pageNumber} count={totalNbPages} onChange={handlePageNumber} />
         </div>
       </main>
     </>

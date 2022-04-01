@@ -21,17 +21,24 @@
 
 
 
-async function fetchProducts(page=1,size=12,brand="",price=0) {
-    let url = "";
-    if(price!==0 && (price===1 || price===-1)){
-        url = `http://localhost:8092/loadClientProducts_filtered?${page ? `&page=${page}` : ""}&size=${size}&brand=${brand}&price=${price}`;
-    }
-    else{// aucun tri par prix
-        url= `http://localhost:8092/loadClientProducts?page=${page}&size=${size}&brand=${brand}`;
-    }
+// async function fetchProducts(page=1,size=12,brand="",price=0) {
+//     let url = "";
+//     if(price!==0 && (price===1 || price===-1)){
+//         url = `http://localhost:8092/loadClientProducts_filtered?${page ? `&page=${page}` : ""}&size=${size}&brand=${brand}&price=${price}`;
+//     }
+//     else{// aucun tri par prix
+//         url= `http://localhost:8092/loadClientProducts?page=${page}&size=${size}&brand=${brand}`;
+//     }
     
-    const body = await (await fetch(url)).json();
-    return body;
+//     const body = await (await fetch(url)).json();
+//     return body;
+//   }
+
+async function fetchProducts(page=1,productsPerPage=12,brand="",price=0) {
+    let url = `http://localhost:8092/loadClientProducts?currentPage=${page}&productsPerPage=${productsPerPage}&brand=${brand}&price=${price}`;
+    
+    let {products,meta} = await (await fetch(url)).json();
+    return {products,meta};
   }
  
 

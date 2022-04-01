@@ -26,7 +26,6 @@ import fetchProducts from "./products";
 
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
-import { chainPropTypes } from "@mui/utils";
 
 const App = () => {
   // Permet de définir des styles aux boutons, listes déroulantes ...
@@ -68,26 +67,28 @@ const App = () => {
           else if (sortBy === -1) products.sort((a, b) => b.price - a.price);
         }
         setProductsList(products);
-        setP50(pValue(products,50));
-        setP90(pValue(products,90));
-        setP95(pValue(products,95));
+        initializePValue(products);
         setIsLoaded(true);
         console.log("page loaded - favorite products");
       } else {
         // Afficher tous les produits (non favoris + favoris)
         let {products,meta} = await fetchProducts(pageNumber,nbProductsPerPage,specificBrand,sortBy);
-        console.log(meta);
         setProductsList(products);
         setTotalNbPages(meta.TotalNbPages);
-        setP50(pValue(products,50));
-        setP90(pValue(products,90));
-        setP95(pValue(products,95));
+        initializePValue(products);
         setIsLoaded(true);
         console.log("page loaded");
       }
-      
     }
   };
+
+  const initializePValue=(products)=>{
+    setP50(pValue(products,50))
+    setP90(pValue(products,90))
+    setP95(pValue(products,95))
+  }
+
+  
 
   const pValue=(products,pval)=>{
     const prod=[...products];
@@ -151,7 +152,6 @@ const App = () => {
     for(let x of favoriteProducts){
       if(x._id===product._id){
         isFav=true;
-        console.log("prod is fav")
         break;
       }
     }
@@ -161,14 +161,6 @@ const App = () => {
   const handleDisplayFavProducts = (event) => {
     setDisplayFavProducts(event.target.checked);
     setIsLoaded(false);
-
-    if (event.target.checked) {
-      // S'il est check, alors on affiche tous les produits favoris
-      console.log("favorite");
-    } else {
-      // Sinon, on affiche tous les produits (affichage normal)
-      console.log("normal");
-    }
   };
 
   // --------------------- Affichage du site ---------------------

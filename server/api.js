@@ -15,9 +15,17 @@ app.use(helmet());
 
 app.options("*", cors());
 
+const allProducts = async () => {
+  const allDB= await service.getAllProducts();
+  //console.log(allDB[0].name)
+  return allDB;
+};
+
+
 app.get("/", (request, response) => {
   response.send({ status: "online" });
 });
+
 
 app.get("/loadClientProducts", async (request, response) => {
   try {

@@ -26,7 +26,7 @@ async function fetchProducts(page=1,size=12,brand="",price=0) {
     if(price!==0 && (price===1 || price===-1)){
         url = `http://localhost:8092/loadClientProducts_filtered?${page ? `&page=${page}` : ""}&size=${size}&brand=${brand}&price=${price}`;
     }
-    else{
+    else{// aucun tri par prix
         url= `http://localhost:8092/loadClientProducts?page=${page}&size=${size}&brand=${brand}`;
     }
     

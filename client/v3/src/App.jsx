@@ -2,15 +2,12 @@ import React, { useState } from "react";
 
 import {
   Typography,
-  AppBar,
-  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
   CssBaseline,
   Grid,
-  Toolbar,
   Container,
   FormControlLabel,
   Pagination,
@@ -20,7 +17,6 @@ import {
   FormControl,
   Select,
   Link,
-  Box,
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
@@ -59,9 +55,9 @@ const App = () => {
         // S'il s'agit d'afficher les produits favoris
 
         products = [...favoriteProducts];
-        if (specificBrand != "")
-          products = products.filter((x) => x.brand == specificBrand); // Si l'utilisateur a selectionné une brand spécifique, alors on filtre
-        if (sortBy != 0) {
+        if (specificBrand !== "")
+          products = products.filter((x) => x.brand === specificBrand); // Si l'utilisateur a selectionné une brand spécifique, alors on filtre
+        if (sortBy !== 0) {
           // Si l'utilisateur a selectionné un sort par prix, alors on sort
           if (sortBy === 1) products.sort((a, b) => a.price - b.price);
           else if (sortBy === -1) products.sort((a, b) => b.price - a.price);
@@ -105,32 +101,39 @@ const App = () => {
     setIsLoaded(false);
   };
 
-  const handleFavoriteProducts = (id) => {
-    if (productIsFavorite(id)) {
+  const handleFavoriteProducts = (product) => {
+    if (productIsFavorite(product)) {
       // Si le produits était dans les favoris, alors on le retire après le click
       console.log("remove from favorites");
-      handleDeleteFavoriteProducts(id);
+      handleDeleteFavoriteProducts(product);
     } // S'il ne l'était pas, alors on le rajoute aux favoris
     else {
       console.log("add to favorites");
-      handleAddFavoriteProducts(id);
+      handleAddFavoriteProducts(product);
     }
   };
 
-  const handleDeleteFavoriteProducts = (id) => {
-    const newFavoriteProducts = [...favoriteProducts];
-    setFavoriteProducts(newFavoriteProducts.filter((x) => x != id));
-  };
-
-  const handleAddFavoriteProducts = (id) => {
-    const newFavoriteProducts = [...favoriteProducts];
-    newFavoriteProducts.push(id);
+  const handleDeleteFavoriteProducts = (product) => {
+    let newFavoriteProducts = [...favoriteProducts];
+    newFavoriteProducts=newFavoriteProducts.filter((x) => x._id !== product._id);
     setFavoriteProducts(newFavoriteProducts);
   };
 
-  const productIsFavorite = (id) => {
+  const handleAddFavoriteProducts = (product) => {
+    const newFavoriteProducts = [...favoriteProducts];
+    newFavoriteProducts.push(product);
+    setFavoriteProducts(newFavoriteProducts);
+  };
+
+  const productIsFavorite = (product) => {
     let isFav = false;
-    if (favoriteProducts.includes(id))isFav=true;
+    for(let x of favoriteProducts){
+      if(x._id===product._id){
+        isFav=true;
+        console.log("prod is fav")
+        break;
+      }
+    }
     return isFav;
   };
 
@@ -255,9 +258,9 @@ const App = () => {
                       <Checkbox
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite />}
-                        checked={productIsFavorite(product._id)}
+                        checked={productIsFavorite(product)}
                         onChange={() => {
-                          handleFavoriteProducts(product._id);
+                          handleFavoriteProducts(product);
                         }}
                       />
                     </CardActions>

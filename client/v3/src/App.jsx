@@ -83,12 +83,17 @@ const App = () => {
   };
 
   const initializePValue=(products)=>{
-    setP50(pValue(products,50))
-    setP90(pValue(products,90))
-    setP95(pValue(products,95))
+    if(products.length>0){// Si la liste des produits n'est pas nul, alors on peut calculer les p-value
+      setP50(pValue(products,50))
+      setP90(pValue(products,90))
+      setP95(pValue(products,95))
+    }
+    else{ // Sinon, la liste est nulle, par exemple, lorsqu'il n'y a pas de produits favoris, et on definit les p-value à 0
+      setP50(0);
+      setP90(0);
+      setP95(0);
+    }
   }
-
-  
 
   const pValue=(products,pval)=>{
     const prod=[...products];
@@ -101,10 +106,6 @@ const App = () => {
     setPageNumber(pageNb);
     setIsLoaded(false);
   };
-
-  // const handleTotalNbPages = (event, total) => {
-  //   setTotalNbPages(total);
-  // };
 
   const handleNbProductsPerPage = (event, nb) => {
     setNbProductsPerPage(nb);

@@ -67,6 +67,7 @@ const App = () => {
           else if (sortBy === -1) products.sort((a, b) => b.price - a.price);
         }
         setProductsList(products);
+        setTotalNbPages(1);
         initializePValue(products);
         setIsLoaded(true);
         console.log("page loaded - favorite products");
@@ -247,7 +248,7 @@ const App = () => {
             </Typography>
           </FormControl>
           <FormControl sx={{ m: 1, float: "right" }}>
-          <Typography variant="h8" marginTop={1.5}>
+          <Typography variant="subtitle2" marginTop={1.5}>
               p50 : <strong>{p50} €</strong> | p90 : <strong>{p90} €</strong> | p95 :<strong>{p95} €</strong> 
             </Typography>
           </FormControl>
